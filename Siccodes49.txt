@@ -688,8 +688,11 @@
           6798-6798 REIT
           6799-6799 Investors, NEC
 
-49 Other  Almost Nothing
+49 Other  Utilities
           4950-4959 Sanitary services
           4960-4961 Steam & air conditioning supplies
           4970-4971 Irrigation systems
           4990-4991 Cogeneration - SM power producer
+
+99 Other  Uncategorized
+          9999-9999 Uncategorized
