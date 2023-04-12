@@ -3,9 +3,10 @@ import json
 from pandas.tseries.offsets import MonthEnd
 
 class FamaData:
-    def __init__(self, path):
+    def __init__(self, path, end_date = None):
         self.path = path
         self.dir = self.load_json()
+        self.end_date = end_date
 
     def load_json(self):
         dir = json.load(open(self.path + 'data.json'))
@@ -17,6 +18,8 @@ class FamaData:
             df = pd.read_csv('data/' + file, skiprows=self.dir[file]['skip'], nrows=self.dir[file]['lines'], index_col=0)
             df['caldt'] = pd.to_datetime(df.index, format='%Y%m', errors='coerce') + MonthEnd(0)
             df = df.query("caldt >= '1963-07-31'")
+            if self.end_date is not None:
+                df = df.query("caldt <= '" + self.end_date + "'")
             df = df.reset_index(drop=True)
             df.name = file[:-4]
             dfs.append(df)
@@ -73,6 +76,15 @@ class FamaData:
     def get_earnings_price_data(self):
         return self._get_data(15)
     
+    def get_excess_return_data(self):
+        import getFamaFrenchFactors as gff
+        exmt = gff.famaFrench5Factor(frequency='m')[['date_ff_factors', 'Mkt-RF']]
+        exmt.columns = ['caldt', 'exmt']
+        exmt['caldt'] = exmt['caldt'] + MonthEnd(0)
+        exmt = exmt.query("caldt >= '1963-07-31'")
+        if self.end_date is not None:
+            exmt = exmt.query("caldt <= '" + self.end_date + "'")
+        return exmt
 
     # Private method
     def _get_data(self, id):
@@ -86,6 +98,8 @@ class FamaData:
         df = pd.read_csv('data/' + filename, skiprows=data['skip'], nrows=data['lines'], index_col=0)
         df['caldt'] = pd.to_datetime(df.index, format='%Y%m', errors='coerce') + MonthEnd(0)
         df = df.query("caldt >= '1963-07-31'")
+        if self.end_date is not None:
+            df = df.query("caldt <= '" + self.end_date + "'")
         df = df.reset_index(drop=True)
         df.name = filename[:-4]
         return df
