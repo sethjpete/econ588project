@@ -15,7 +15,7 @@ class FamaData:
     def get_all_data(self):
         dfs = []
         for file in self.dir:
-            df = pd.read_csv('data/' + file, skiprows=self.dir[file]['skip'], nrows=self.dir[file]['lines'], index_col=0)
+            df = pd.read_csv(path + file, skiprows=self.dir[file]['skip'], nrows=self.dir[file]['lines'], index_col=0)
             df['caldt'] = pd.to_datetime(df.index, format='%Y%m', errors='coerce') + MonthEnd(0)
             df = df.query("caldt >= '1963-07-31'")
             if self.end_date is not None:
