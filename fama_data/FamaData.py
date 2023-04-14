@@ -80,6 +80,7 @@ class FamaData:
         import getFamaFrenchFactors as gff
         exmt = gff.famaFrench5Factor(frequency='m')[['date_ff_factors', 'Mkt-RF']]
         exmt.columns = ['caldt', 'exmt']
+        exmt['exmt'] = exmt['exmt'] * 100
         exmt['caldt'] = exmt['caldt'] + MonthEnd(0)
         exmt = exmt.query("caldt >= '1963-07-31'")
         if self.end_date is not None:
