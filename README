@@ -7,3 +7,8 @@ obscure packages:
 
 sklearn_pandas
 getFamaFrenchFactors
+
+TEST
+
+  git config --global user.email "eric.vorkink@gmail.com"
+  git config --global user.name "evorkink"
