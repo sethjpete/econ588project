@@ -3,9 +3,10 @@ import json
 from pandas.tseries.offsets import MonthEnd
 
 class FamaData:
-    def __init__(self, path, end_date = None):
+    def __init__(self, path, begin_date = None, end_date = None):
         self.path = path
         self.dir = self.load_json()
+        self.begin_date = begin_date
         self.end_date = end_date
 
     def load_json(self):
@@ -15,11 +16,13 @@ class FamaData:
     def get_all_data(self):
         dfs = []
         for file in self.dir:
-            df = pd.read_csv(path + file, skiprows=self.dir[file]['skip'], nrows=self.dir[file]['lines'], index_col=0)
+            df = pd.read_csv(self.path + file, skiprows=self.dir[file]['skip'], nrows=self.dir[file]['lines'], index_col=0)
             df['caldt'] = pd.to_datetime(df.index, format='%Y%m', errors='coerce') + MonthEnd(0)
             df = df.query("caldt >= '1963-07-31'")
             if self.end_date is not None:
                 df = df.query("caldt <= '" + self.end_date + "'")
+            if self.begin_date is not None:
+                df = df.query("caldt >= '" + self.begin_date + "'")
             df = df.reset_index(drop=True)
             df.name = file[:-4]
             dfs.append(df)
@@ -85,6 +88,8 @@ class FamaData:
         exmt = exmt.query("caldt >= '1963-07-31'")
         if self.end_date is not None:
             exmt = exmt.query("caldt <= '" + self.end_date + "'")
+        if self.begin_date is not None:
+            exmt = exmt.query("caldt >= '" + self.begin_date + "'")
         return exmt
 
     # Private method
@@ -101,6 +106,8 @@ class FamaData:
         df = df.query("caldt >= '1963-07-31'")
         if self.end_date is not None:
             df = df.query("caldt <= '" + self.end_date + "'")
+        if self.begin_date is not None:
+            df = df.query("caldt >= '" + self.begin_date + "'")
         df = df.reset_index(drop=True)
         df.name = filename[:-4]
         return df
