@@ -1,1 +1,7 @@
-All deliverables are in final.ipynb file
+**All deliverables are in final.ipynb file**
+
+
+EXPLAINING THE UNEXPLAINED
+Reducing alpha in momentum with multifactor models
+
+In this repo, we propose additional factors beyond those of Fama and French and test to see how well they fit the data. We use accounting data, firm industry variables, and machine learning techniques to pick additional state variables that explain variation in stock returns. We then test these factors by forming equal weight value portfolios and testing them against momentum sorted portfolios. We find that our additional factors do not explain momentum perfectly, but we do outperform the Fama-French model in some settings. We test using all NYSE and NASDAQ stocks as well as the S&P 500. Finally, we also apply quantile regression techniques to better understand where our model is explaining the variation best.
